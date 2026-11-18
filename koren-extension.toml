@@ -1,0 +1,47 @@
+schema_version = 1
+id = "org.koren.toml"
+name = "TOML"
+publisher = "Koren"
+version = "0.1.0"
+description = "TOML language support, Taplo LSP, and formatting."
+entry_point = "main.lua"
+api_version = "1.0.0"
+capabilities = ["language_definitions", "language_server", "run_configurations", "tools"]
+
+[[languages]]
+id = "toml"
+name = "TOML"
+extensions = ["toml"]
+
+[[tools]]
+id = "taplo"
+name = "Taplo"
+description = "TOML toolkit and language server"
+category = "language-server"
+optional = true
+executables = ["taplo"]
+
+[[language_servers]]
+id = "taplo"
+command = "tool:taplo"
+arguments = ["lsp", "stdio"]
+languages = ["toml"]
+file_extensions = ["toml"]
+
+[[run_configurations]]
+id = "taplo-fmt"
+name = "Taplo Format"
+tool = "taplo"
+arguments = ["fmt", "${file}"]
+working_directory = "${workspace}"
+languages = ["toml"]
+output = "run"
+
+[[run_configurations]]
+id = "taplo-lint"
+name = "Taplo Lint"
+tool = "taplo"
+arguments = ["lint", "${file}"]
+working_directory = "${workspace}"
+languages = ["toml"]
+output = "run"

@@ -1,0 +1,26 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify manifest
+        run: test -f koren-extension.toml && test -f main.lua
+      - name: Package archive
+        run: |
+          mkdir -p dist
+          tar -czf dist/extension.tar.gz koren-extension.toml main.lua README.md LICENSE
+      - name: Upload release asset
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/extension.tar.gz
